@@ -5,7 +5,6 @@ import {Modal} from './Modal/Modal';
 import {ImageGallery} from "./ImageGallery/ImageGallery";
 import PropTypes from "prop-types";
 
-
 //========================================================================================
 export const  App = () => {
 
