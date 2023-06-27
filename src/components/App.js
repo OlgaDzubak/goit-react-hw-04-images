@@ -3,7 +3,6 @@ import { fetchImagesFromAPI } from '../api/api';
 import {Searchbar} from "./Searchbar/Searchbar";
 import {Modal} from './Modal/Modal';
 import {ImageGallery} from "./ImageGallery/ImageGallery";
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import PropTypes from "prop-types";
 
 
@@ -54,7 +53,6 @@ export const  App = () => {
       
       return ()=>{
         abortCtrl.abort();
-        clearAllBodyScrollLocks();
       };
 
     }, [filter, page, per_page]);
