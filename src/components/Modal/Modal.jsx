@@ -7,11 +7,12 @@ import css from './modal.module.css';
 export const Modal = ({image, onCloseModal}) => {
     
     useEffect(()=>{
+        const onKeyDown = (event) => { if (event.code === 'Escape') onCloseModal(); };
         window.addEventListener('keydown', onKeyDown);
         return () => { window.removeEventListener('keydown', onKeyDown) }
-    }, []);
+    }, [onCloseModal]);
 
-    const onKeyDown = (event) => { if (event.code === 'Escape') onCloseModal(); };
+   
     const onOverlayClick = (event) =>{ if (event.target === event.currentTarget) onCloseModal(); };
 
     return (
