@@ -34,23 +34,26 @@ export const  App = () => {
       setErr(null);
     } 
 
-    const getImageGallery = async (query) => {
-      try{
-          setIsLoading(true);
-          const {hits, totalHits} = await fetchImagesFromAPI(query, page, per_page);
-          if (!hits.length) return setIsEmpty(true);
-          setGallery(gallery=>[...gallery, ...hits]);
-          setIsButtonShown(page < Math.ceil(totalHits /per_page));
-      }catch(error){ 
-          if (error.code !== 'ERR_CANCELED') setErr("Oops! Something went wrong! Try reloading the page!");
-      }finally {setIsLoading(false);}
-    }
+
 
     useEffect(()=>{
       const q = (filter.split('/'))[1];
       if (!q) return;
+
+      const getImageGallery = async (query) => {
+        try{
+            setIsLoading(true);
+            const {hits, totalHits} = await fetchImagesFromAPI(query, page, per_page);
+            if (!hits.length) return setIsEmpty(true);
+            setGallery(gallery=>[...gallery, ...hits]);
+            setIsButtonShown(page < Math.ceil(totalHits /per_page));
+        }catch(error){ 
+            if (error.code !== 'ERR_CANCELED') setErr("Oops! Something went wrong! Try reloading the page!");
+        }finally {setIsLoading(false);}
+      }
       getImageGallery(q);
-    }, [filter, page]);
+
+    }, [filter, page, per_page]);
 
     const SubmitSearchBar = (value) => { 
       if (!value.trim())  alert("Empty request! Please point what you want to find!"); 
