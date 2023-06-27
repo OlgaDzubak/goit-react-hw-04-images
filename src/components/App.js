@@ -23,11 +23,7 @@ export const  App = () => {
   //------------------------------------------------------------
 
 
-    useEffect(()=>{
-      const q = (filter.split('/'))[1];
-      if (!q) return;
-      getImageGallery(q);
-    }, [filter, page]);
+
     
     const resetState = () => {
       setPage(1);
@@ -49,6 +45,12 @@ export const  App = () => {
           if (error.code !== 'ERR_CANCELED') setErr("Oops! Something went wrong! Try reloading the page!");
       }finally {setIsLoading(false);}
     }
+
+    useEffect(()=>{
+      const q = (filter.split('/'))[1];
+      if (!q) return;
+      getImageGallery(q);
+    }, [filter, page]);
 
     const SubmitSearchBar = (value) => { 
       if (!value.trim())  alert("Empty request! Please point what you want to find!"); 
