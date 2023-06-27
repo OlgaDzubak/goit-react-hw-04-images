@@ -1,30 +1,28 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { fetchImagesFromAPI } from '../api/api';
 import {Searchbar} from "./Searchbar/Searchbar";
 import {Modal} from './Modal/Modal';
 import {ImageGallery} from "./ImageGallery/ImageGallery";
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import PropTypes from "prop-types";
 
 
 //========================================================================================
 export const  App = () => {
 
-  //STATE-------------------------------------------------------
-   const [filter, setFilter] = useState("");
-   const [page, setPage] = useState(1);
-   const [per_page] = useState(12);
-   const [gallery, setGallery] = useState([]);
-   const [isLoading, setIsLoading] = useState(false);
-   const [isEmpty, setIsEmpty] = useState(false);
-   const [isButtonShown, setIsButtonShown] = useState(false);
-   const [err, setErr] = useState(null);
-   const [showModal, setShowModal] = useState(false);
-   const [image, setImage] = useState({src: '', alt: '',});
-  //------------------------------------------------------------
-
-
-
-    
+    //STATE-------------------------------------------------------
+    const [filter, setFilter] = useState("");
+    const [page, setPage] = useState(1);
+    const [per_page] = useState(12);
+    const [gallery, setGallery] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
+    const [isButtonShown, setIsButtonShown] = useState(false);
+    const [err, setErr] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [image, setImage] = useState({src: '', alt: '',});
+    //------------------------------------------------------------
+  
     const resetState = () => {
       setPage(1);
       setGallery([]);
@@ -35,15 +33,16 @@ export const  App = () => {
     } 
 
 
-
     useEffect(()=>{
       const q = (filter.split('/'))[1];
+      const abortCtrl = new AbortController();
+
       if (!q) return;
 
       const getImageGallery = async (query) => {
         try{
             setIsLoading(true);
-            const {hits, totalHits} = await fetchImagesFromAPI(query, page, per_page);
+            const {hits, totalHits} = await fetchImagesFromAPI(query, page, per_page, abortCtrl.signal);
             if (!hits.length) return setIsEmpty(true);
             setGallery(gallery=>[...gallery, ...hits]);
             setIsButtonShown(page < Math.ceil(totalHits /per_page));
@@ -52,6 +51,11 @@ export const  App = () => {
         }finally {setIsLoading(false);}
       }
       getImageGallery(q);
+      
+      return ()=>{
+        abortCtrl.abort();
+        clearAllBodyScrollLocks();
+      };
 
     }, [filter, page, per_page]);
 
@@ -68,17 +72,16 @@ export const  App = () => {
     }
 
     const ClickLoadMoreBtn = () => setPage(page => page + 1);
-    
+
     const toggleModal = () => setShowModal(!showModal);
 
   return (
     <>
       <Searchbar onSubmit={SubmitSearchBar}/>
       <ImageGallery filter={filter} gallery={gallery} isEmpty={isEmpty} isLoading={isLoading} isButtonShown={isButtonShown} err={err} onGalleryClick={showBigImage} onClickButton={ClickLoadMoreBtn}/>
-      {showModal && (<Modal onCloseModal={toggleModal} image={image}/>)}
+      {showModal && (<Modal onCloseModal={toggleModal} image={image} />)}
     </>
   );
-
 };
 
 App.propTypes={
