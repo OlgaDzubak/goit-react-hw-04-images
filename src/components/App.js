@@ -94,5 +94,4 @@ App.propTypes={
   showModal: PropTypes.bool,
   image: PropTypes.object,
 }
-
 //========================================================================================
