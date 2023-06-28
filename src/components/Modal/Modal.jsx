@@ -18,7 +18,7 @@ export const Modal = ({image, onCloseModal}) => {
     return (
         <div className={css.Overlay} onClick={onOverlayClick}>
             <div className={css.modalContent}>
-                <img className={css.modalImage} src={image.src} alt={image.alt}></img> 
+                <img className={css.modalImage} src={image.src} alt={image.alt}/>
             </div>
         </div>
     );

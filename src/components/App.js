@@ -30,12 +30,11 @@ export const  App = () => {
       setErr(null);
     } 
 
-
     useEffect(()=>{
-      const q = (filter.split('/'))[1];
+      const query = (filter.split('/'))[1];
       const abortCtrl = new AbortController();
 
-      if (!q) return;
+      if (!query) return;
 
       const getImageGallery = async (query) => {
         try{
@@ -48,7 +47,7 @@ export const  App = () => {
             if (error.code !== 'ERR_CANCELED') setErr("Oops! Something went wrong! Try reloading the page!");
         }finally {setIsLoading(false);}
       }
-      getImageGallery(q);
+      getImageGallery(query);
       
       return ()=>{
         abortCtrl.abort();
@@ -56,7 +55,7 @@ export const  App = () => {
 
     }, [filter, page, per_page]);
 
-    const SubmitSearchBar = (value) => { 
+    const submitSearchBar = (value) => { 
       if (!value.trim())  alert("Empty request! Please point what you want to find!"); 
       setFilter(`${Date.now()}/${value.trim()}`);
       resetState();
@@ -68,14 +67,14 @@ export const  App = () => {
       setShowModal(true);
     }
 
-    const ClickLoadMoreBtn = () => setPage(page => page + 1);
+    const clickLoadMoreBtn = () => setPage(page => page + 1);
 
     const toggleModal = () => setShowModal(!showModal);
 
   return (
     <>
-      <Searchbar onSubmit={SubmitSearchBar}/>
-      <ImageGallery filter={filter} gallery={gallery} isEmpty={isEmpty} isLoading={isLoading} isButtonShown={isButtonShown} err={err} onGalleryClick={showBigImage} onClickButton={ClickLoadMoreBtn}/>
+      <Searchbar onSubmit={submitSearchBar}/>
+      <ImageGallery filter={filter} gallery={gallery} isEmpty={isEmpty} isLoading={isLoading} isButtonShown={isButtonShown} err={err} onGalleryClick={showBigImage} onClickButton={clickLoadMoreBtn}/>
       {showModal && (<Modal onCloseModal={toggleModal} image={image} />)}
     </>
   );

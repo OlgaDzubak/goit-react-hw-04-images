@@ -29,7 +29,7 @@ export const ImageGallery = ({filter, gallery, isEmpty, isLoading, isButtonShown
                             })                                
                         }
                         
-                      </ul> 
+                        </ul> 
                       
                       </>
                     : <p className={css.p_isEmpty}>Sorry. There are no images for filter "{filter.split('/')[1]}"</p>
